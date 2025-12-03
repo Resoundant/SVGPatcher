@@ -1,6 +1,6 @@
-from parser import get_elements, load_svg
-from renderer import render_png
-from replacer import replace_placeholders
+from SVGPatcher.parser import get_elements, load_svg
+from SVGPatcher.renderer import render_png
+from SVGPatcher.replacer import replace_placeholders
 
 
 class SVGTemplate:

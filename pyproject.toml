@@ -1,0 +1,25 @@
+[project]
+name = "SVGPatcher"
+version = "0.0.1"
+authors = [{ name = "Fayad", email = "aalfayad@resoundant.com" }]
+description = "A python library that takes in SVG templates and fills them with text and images and generates a png."
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Operating System :: OS Independent",
+]
+dependencies = ["lxml"]
+
+[project.urls]
+Homepage = "https://github.com/Resoundant/SVGPatcher"
+Issues = "https://github.com/Resoundant/SVGPatcher/issues"
+
+[build-system]
+requires = ["hatchling >= 1.26"]
+build-backend = "hatchling.build"
