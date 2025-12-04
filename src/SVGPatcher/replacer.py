@@ -15,7 +15,7 @@ def replace_placeholders(placeholders: dict, id_elements: list, text_elements: l
             if (
                 id_elem.attrib["id"] == placeholder
                 and id_elem.tag.endswith("rect")
-                and "url(#pattern" in id_elem.attrib["fill"]
+                and "url(#" in id_elem.attrib["fill"]
             ):
                 img_elem = rect_to_img(id_elem)
                 replace_image(img_elem, value)
