@@ -12,7 +12,7 @@ def load_svg(path: str):
         raise f"Invalid SVG file: {e}"
 
 
-def get_elements(root, keys: list | None = None):
+def get_placeholder_elements(root, placeholders: list | None = None):
     namespaces = {"re": "http://exslt.org/regular-expressions"}
 
     id_expression = "//*[re:test(@id, '\\{\\{(.*?)\\}\\}')]"
@@ -21,8 +21,8 @@ def get_elements(root, keys: list | None = None):
     text_expression = "//*[re:test(text(), '\\{\\{(.*?)\\}\\}')]"
     text_elements = root.xpath(text_expression, namespaces=namespaces)
 
-    if keys:
-        keys_expression = f"//*[re:test(@id, '^({"|".join(keys)})$')]"
-        id_elements += root.xpath(keys_expression, namespaces=namespaces)
+    if placeholders:
+        placeholders_expression = f"//*[re:test(@id, '^({"|".join(placeholders)})$')]"
+        id_elements += root.xpath(placeholders_expression, namespaces=namespaces)
 
     return id_elements, text_elements
