@@ -12,14 +12,6 @@ def replace_placeholders(placeholders: dict, id_elements: list, text_elements: l
             if id_elem.attrib["id"] == placeholder and id_elem.tag.endswith("image"):
                 replace_image(id_elem, value)
 
-            if (
-                id_elem.attrib["id"] == placeholder
-                and id_elem.tag.endswith("rect")
-                and "url(#" in id_elem.attrib["fill"]
-            ):
-                img_elem = rect_to_img(id_elem)
-                replace_image(img_elem, value)
-
 
 def replace_text(elem, placeholder: str, value: str):
     try:
@@ -35,23 +27,3 @@ def replace_image(elem, img_path: str):
     href_key = list(filter(lambda e: "href" in e, elem.attrib.keys()))[0]
 
     elem.set(href_key, img_path)
-
-
-def replace_elem(old_elem, new_elem):
-    old_elem.getparent().replace(old_elem, new_elem)
-    return new_elem
-
-
-def rect_to_img(elem):
-    img = ET.Element(
-        "{http://www.w3.org/2000/svg}image",
-        {
-            "href": "",
-            "x": elem.attrib.get("x"),
-            "y": elem.attrib.get("y"),
-            "width": elem.attrib.get("width"),
-            "height": elem.attrib.get("height"),
-        },
-    )
-
-    return replace_elem(elem, img)
