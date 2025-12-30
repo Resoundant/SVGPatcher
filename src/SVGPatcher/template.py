@@ -1,4 +1,4 @@
-from SVGPatcher.parser import get_elements, load_svg
+from SVGPatcher.parser import get_placeholder_elements, load_svg
 from SVGPatcher.renderer import render_png
 from SVGPatcher.replacer import replace_placeholders
 
@@ -8,10 +8,39 @@ class SVGTemplate:
         self.svg_path = svg_path
         self.root = load_svg(svg_path)
 
-    def replace(self, placeholders: dict):
-        self.root = load_svg(self.svg_path)
-        id_elements, text_elements = get_elements(self.root, placeholders.keys())
+    def get_elem(self, id):
+        keys_expression = f"//*[@id='{id}']"
+        elems = self.root.xpath(keys_expression)
+        if len(elems):
+            return elems[0]
+        return None
+
+    def set_image(self, id, image_id):
+        elem = self.get_elem(id)
+        if elem is not None:
+            elem.attrib["id"] = image_id
+        return self
+
+    def set_fill(self, id, fill):
+        elem = self.get_elem(id)
+        if elem is not None:
+            elem.set("fill", fill)
+        return self
+
+    def remove(self, id):
+        elem = self.get_elem(id)
+        if elem is not None:
+            elem.getparent().remove(elem)
+        return self
+
+    def replace(self, placeholders: dict, new_copy=True):
+        if new_copy:
+            self.root = load_svg(self.svg_path)
+        id_elements, text_elements = get_placeholder_elements(
+            self.root, placeholders.keys()
+        )
         replace_placeholders(placeholders, id_elements, text_elements)
+        return self
 
     def save(
         self,
@@ -21,3 +50,5 @@ class SVGTemplate:
         keep_out_svg: bool = False,
     ):
         render_png(self.root, outpath, zoom=zoom, dpi=dpi, keep_out_svg=keep_out_svg)
+        return self
+        
