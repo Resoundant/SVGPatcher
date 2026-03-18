@@ -42,13 +42,6 @@ class SVGTemplate:
         replace_placeholders(placeholders, id_elements, text_elements)
         return self
 
-    def save(
-        self,
-        outpath: str,
-        zoom: int = 2,
-        dpi: int | float = 300,
-        keep_out_svg: bool = False,
-    ):
-        render_png(self.root, outpath, zoom=zoom, dpi=dpi, keep_out_svg=keep_out_svg)
+    def save(self, outpath: str, zoom: int = 2, dpi: int | float = 300):
+        render_png(self.root, outpath, zoom=zoom, dpi=dpi)
         return self
-        
