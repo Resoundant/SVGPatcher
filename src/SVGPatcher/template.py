@@ -42,6 +42,9 @@ class SVGTemplate:
         replace_placeholders(placeholders, id_elements, text_elements)
         return self
 
+    def png_bytes(self, zoom: int = 2, dpi: int | float = 300):
+        return render_png(self.root, zoom=zoom, dpi=dpi)
+
     def save(self, outpath: str, zoom: int = 2, dpi: int | float = 300):
         render_png(self.root, outpath, zoom=zoom, dpi=dpi)
         return self
