@@ -29,8 +29,8 @@ if __name__=="__main__":
     #Saving build info file
     root=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     output_path=os.path.join(root,"src","SVGPatcher","build_info.json")
-    with open(output_path,"w") as write_obj:
-        json.dump(build_info,write_obj,indent=2)
+    with open(output_path,"w") as f:
+        json.dump(build_info,f,indent=2)
     print(f"Generated {output_path}")
 
     #Updating pyproject version for non-main build
@@ -39,6 +39,6 @@ if __name__=="__main__":
         pyproject=toml.load(pyproject_path)
         version_new=f"{pyproject['project']['version']}.{build_info['START_TIME']}"
         pyproject["project"]["version"]=version_new
-        with open(pyproject_path,"w") as write_obj:
-            toml.dump(pyproject,write_obj)
+        with open(pyproject_path,"w") as f:
+            toml.dump(pyproject,f)
         print(f"Updated pyproject version to: {version_new}")
