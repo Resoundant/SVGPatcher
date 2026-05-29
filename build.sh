@@ -22,8 +22,8 @@ info "Installing build requirements"
 "$PY" -m pip install --no-cache-dir -r ./build/requirements.txt
 
 # Running build steps
-info "Generating build info"
-"$PY" ./build/generate_build_info.py
+info "Checking version"
+"$PY" ./build/check_version.py
 info "Building package"
 "$PY" -m build
 info "SVGPatcher build done!"

@@ -20,8 +20,8 @@ echo Installing build requirements
 "%PY%" -m pip install --no-cache-dir -r .\build\requirements.txt
 
 :: Running build steps
-echo Generating build info
-"%PY%" .\build\generate_build_info.py
+echo Checking version
+"%PY%" .\build\check_version.py
 echo Building package
 "%PY%" -m build
 echo SVGPatcher build done!
