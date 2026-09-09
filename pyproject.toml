@@ -1,6 +1,6 @@
 [project]
 name = "SVGPatcher"
-version = "0.0.2"
+version = "0.0.3"
 description = "A Python library that takes in SVG templates and fills them with text and images and generates a png"
 authors = [
     { name = "Fayad", email = "aalfayad@resoundant.com" }
