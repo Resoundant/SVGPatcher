@@ -16,17 +16,54 @@ pipeline{
                 }
             }
         }
-        stage('STORE ARTIFACTS'){
-            steps{
-                script{
-                    //Push package to pypiserver
+        stage('STORE ARTIFACTS') {
+            steps {
+                script {
+                    def repo1Status = 1
+                    def repo2Status = 1
+
+                    // Upload to rpy
                     withCredentials([usernamePassword(
-                        credentialsId:'jenkins-pypiserver',
-                        usernameVariable:'PYPI_USER',
-                        passwordVariable:'PYPI_PASS')]){
-                            sh """
-                            ./"${env.VENV}"/bin/python3 -m twine upload --repository-url http://rpy.resoundant-hq.com:8081 -u "${PYPI_USER}" -p "${PYPI_PASS}" ./dist/*
-                            """
+                        credentialsId: 'jenkins-pypiserver',
+                        usernameVariable: 'PYPI_USER',
+                        passwordVariable: 'PYPI_PASS'
+                    )]) {
+                        repo1Status = sh(
+                            label: 'Upload package to rpy',
+                            returnStatus: true,
+                            script: '''
+                                ./"$VENV"/bin/python3 -m twine upload \
+                                    --repository-url http://rpy.resoundant-hq.com:8081 \
+                                    -u "$PYPI_USER" \
+                                    -p "$PYPI_PASS" \
+                                    ./dist/*
+                            '''
+                        )
+                    }
+
+                    repo2Status = sh(
+                        label: 'Upload package to cicd2',
+                        returnStatus: true,
+                        script: '''
+                            ./"$VENV"/bin/python3 -m twine upload \
+                                --repository-url http://cicd2.resoundant-hq.com:8081 \
+                                --skip-existing \
+                                -u anon \
+                                -p anon \
+                                ./dist/*
+                        '''
+                    )
+
+                    if (repo1Status != 0) {
+                        echo "Upload to rpy failed with exit code ${repo1Status}"
+                    }
+
+                    if (repo2Status != 0) {
+                        echo "Upload to cicd2 failed with exit code ${repo2Status}"
+                    }
+
+                    if (repo1Status != 0 && repo2Status != 0) {
+                        error('Artifact upload failed for both repositories')
                     }
                 }
             }
