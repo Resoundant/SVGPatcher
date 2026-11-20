@@ -1,5 +1,5 @@
 pipeline{
-    agent{label 'build-lin3'}
+    agent{label 'python && linux'}
     environment{
         START_TIME = new Date().format("YYYYMMddHHmm", TimeZone.getTimeZone('CST'))
         VENV = ".venv_build"
@@ -13,6 +13,12 @@ pipeline{
                     chmod +x ./build.sh
                     ./build.sh
                     """
+                    def packageNames = sh(
+                        label: 'Read distribution package names',
+                        returnStdout: true,
+                        script: "find dist -maxdepth 1 -type f -printf '%f\\n' | sort"
+                    ).trim().readLines().join(', ')
+                    currentBuild.displayName = "#${env.BUILD_NUMBER} ${packageNames}"
                 }
             }
         }
